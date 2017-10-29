@@ -1,6 +1,8 @@
 #include "Arduino.h"
 #include "FlexorsFunctions.h"
 
+static char TERMINAL_SIGN = 's';
+
 static const int TotalFlexors = 10;
 int flexors_lastValue[TotalFlexors];
 int flexors_min[TotalFlexors];
@@ -10,13 +12,79 @@ int calibration_time = 3000;
 boolean calibrate = false;
 
 boolean threshold_On = true;
-int threshold = 5;
+int threshold = 0;
 
-boolean get_calibrationStatus(){
-  return calibrate;  
+void addFlexor(int flexors[]){
+  int pin = Serial.parseInt();
+  int mapping = Serial.parseInt();
+  
+  if(Serial.read() == TERMINAL_SIGN){
+    for(int i=0;i<TotalFlexors;i++){
+      if(flexors[i]==pin){
+        return;  
+      }
+    }
+    pinMode(pin,INPUT);
+    flexors[mapping]=pin;
+    if(calibrate==true){
+      int min_avg =0;
+      int max_avg=0;
+      int count;
+      if(mapping<5){
+        for(int i=0; i<5;i++){
+          if(flexors[i]>-1){
+            count++;
+            min_avg=min_avg+flexors_min[i];
+            max_avg=max_avg+flexors_max[i];
+          }
+        }
+      }else{
+        for(int i=5; i<TotalFlexors;i++){
+          if(flexors[i]>-1){
+            count++;
+            min_avg=min_avg+flexors_min[i];
+            max_avg=max_avg+flexors_max[i];
+          }
+        } 
+      }
+      if(count>0){
+        min_avg=(min_avg/count);
+        max_avg=(max_avg/count);
+        flexors_min[mapping]=min_avg;
+        flexors_max[mapping]=max_avg;
+        flexors_lastValue[mapping]=-1;
+      }else{
+        //implementar calibración individual
+        flexors_min[mapping]=100;
+        flexors_max[mapping]=270;
+        flexors_lastValue[mapping]=-1;
+      }
+    }else{
+      flexors_min[mapping]=-1;
+      flexors_max[mapping]=-1;
+      flexors_lastValue[mapping]=-1;
+    } 
+  }
+  
 }
 
-boolean set_threshold(){
+void removeFlexor(int flexors[]){
+  int mapping = Serial.parseInt();
+  if(Serial.read() == TERMINAL_SIGN){
+    if(flexors[mapping]>-1){
+      flexors[mapping]=-1;
+      flexors_lastValue[mapping]=-1;
+      flexors_min[mapping]=-1;
+      flexors_max[mapping]=-1;
+    }  
+  }
+}
+
+boolean get_calibrationStatus(){
+  return calibrate;
+}
+
+void set_threshold(){
   readValue = Serial.parseInt();
   threshold=readValue;  
 }
@@ -61,7 +129,11 @@ int validValue( int flexors[], int value, int indice){
     return -1;
   }
   else{
-    value = readSensor(value,flexors_min[indice],flexors_max[indice]);
+    if(calibrate==true){
+      value = readSensor(value,flexors_min[indice],flexors_max[indice]);
+    }else{
+      value = readSensor(value,130,270);
+    }
     if(threshold_On == true){
       if(flexors_lastValue[indice]== -1){
         flexors_lastValue[indice]=value;
@@ -82,47 +154,55 @@ int validValue( int flexors[], int value, int indice){
 
 
 // FUNCION PARA CALIBRAR LOS SENSORES
-void calibrateFlexors(int flexors[], int count_sensors)
+void calibrateFlexors(int flexors[])
 {
   int value;
   boolean valid = false;
-  if(calibrate==false){
-        delay(2000);
-        for(int i =0;i < count_sensors; i++){
-          if(flexors[i]>-1){
-            value=analogRead(flexors[i]);
-            while(simpleValue(value) == -1){
-                value=analogRead(flexors[i]);
+  if(Serial.read() == TERMINAL_SIGN){
+
+    if(calibrate==false){
+          delay(2000);
+          for(int i =0;i < TotalFlexors; i++){
+            if(flexors[i]>-1){
+              value=analogRead(flexors[i]);
+              while(simpleValue(value) == -1){
+                  value=analogRead(flexors[i]);
+              }
+               flexors_min[i]=value;
+               flexors_max[i]=value;
+               flexors_lastValue[i]=-1;
             }
-             flexors_min[i]=value;
-             flexors_max[i]=value;
-          }
-      }
-  }
-  int exit_f=0;
-  //Serial.println("Calibrando, por favor abra y cierre la mano. Presione 1 para finalizar");
-  while(exit_f!=1){
-    if(Serial.available() > 0){
-      exit_f = Serial.parseInt();
+        }
     }
-      for(int i=0; i<count_sensors;i++){
-          if(flexors[i]>-1){
-             value=analogRead(flexors[i]);
-             if(simpleValue(value)>-1){
-
-                if(flexors_max[i]< value){
-                  flexors_max[i]= value;
-                }
-                
-                if(flexors_min[i]> value){
-                  flexors_min[i]= value;
-                }
-
-             }
-          }
-      }
+    int exit_f=0;
+    //Serial.println("Calibrando, por favor abra y cierre la mano. Presione 1 para finalizar");
+    while(exit_f!='e'){
+      
+        for(int i=0; i<TotalFlexors;i++){
+            if(flexors[i]>-1){
+               value=analogRead(flexors[i]);
+               if(simpleValue(value)>-1){
+  
+                  if(flexors_max[i]< value){
+                    flexors_max[i]= value;
+                  }
+                  
+                  if(flexors_min[i]> value){
+                    flexors_min[i]= value;
+                  }
+               }
+               
+            }
+        }
+  
+        if(Serial.available() > 0){
+          exit_f = Serial.read();
+        }
         delay(100);
-    }
-    calibrate=true;
+      }
+      calibrate=true;
+      
+  }
+  
 }
 
