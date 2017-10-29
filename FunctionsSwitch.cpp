@@ -63,23 +63,28 @@ void selectFunction(int functionCase){
       }  
 }
 
-void selectFlexorsFunction(int functionCase, int flexors[], int count_sensors){
+void selectFlexorsFunction(int functionCase, int flexors[]){
   switch (functionCase) {
 
         case 10:
-
-          calibrateFlexors(flexors,count_sensors);
+        
+          addFlexor(flexors);
           break;
 
         case 11:
-        
-          set_threshold();
+          removeFlexor(flexors);
+          break;
+          
+        case 12:
+          calibrateFlexors(flexors);
           break;
 
+        case 13:
+          set_threshold();
+          break;
+          
         default:
 
           break;
-          
       }
-  
 }

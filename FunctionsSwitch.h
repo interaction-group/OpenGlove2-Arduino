@@ -1,4 +1,4 @@
 #include "Arduino.h"
 
 void selectFunction(int functionCase);
-void selectFlexorsFunction(int functionCase, int flexors[], int count_sensors);
+void selectFlexorsFunction(int functionCase, int flexors[]);
