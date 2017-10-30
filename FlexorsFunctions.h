@@ -10,3 +10,4 @@ int validValue( int flexors[], int value, int indice);
 void calibrateFlexors(int flexors[]);
 void addFlexor(int flexors[]);
 void removeFlexor(int flexors[]);
+void resetFlexors(int flexors[]);
