@@ -33,7 +33,8 @@ void loop() {
       if(flexors[i]>-1){
           flex_value=validValue(flexors, analogRead(flexors[i]), i);
           if(flex_value>-1){
-           Serial.println(String(flexors[i])+": "+flex_value);
+            Serial.println(String(i)+","+flex_value);
+          // Serial.println(String(flexors[i])+","+String(i)+","+flex_value);
           }
        }    
   }

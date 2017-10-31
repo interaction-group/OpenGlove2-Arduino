@@ -82,6 +82,10 @@ void selectFlexorsFunction(int functionCase, int flexors[]){
         case 13:
           set_threshold();
           break;
+
+        case 14:
+          resetFlexors(flexors);
+          break;
           
         default:
 

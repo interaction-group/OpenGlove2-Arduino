@@ -207,12 +207,14 @@ void calibrateFlexors(int flexors[])
 }
 
 void resetFlexors(int flexors[]){
-  for(int i=0;i<TotalFlexors;i++){
-    flexors[i]=-1;
-    flexors_min[i]=-1;
-    flexors_max[i]=-1;
-    flexors_lastValue[i]=-1;
+  if(Serial.read() == TERMINAL_SIGN){
+      for(int i=0;i<TotalFlexors;i++){
+      flexors[i]=-1;
+      flexors_min[i]=-1;
+      flexors_max[i]=-1;
+      flexors_lastValue[i]=-1;
+    }
+    calibrate=false;     
   }
-  calibrate=false;  
 }
 
