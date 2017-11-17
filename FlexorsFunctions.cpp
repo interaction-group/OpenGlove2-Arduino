@@ -89,12 +89,6 @@ void set_threshold(){
   threshold=readValue;  
 }
 
-void set_Threshold(int value){
-    if(value>=0 && value<100){
-        threshold=value;
-      }
-}
-
 boolean checkFlexor(int flexors[], int pin){
   for(int i=0; i < TotalFlexors; i++){
     if(flexors[i]==pin){
@@ -214,6 +208,7 @@ void resetFlexors(int flexors[]){
       flexors_max[i]=-1;
       flexors_lastValue[i]=-1;
     }
+    threshold=0;
     calibrate=false;     
   }
 }

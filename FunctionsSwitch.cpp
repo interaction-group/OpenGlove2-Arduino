@@ -3,6 +3,7 @@
 #include "GloveFunctions.h"
 #include "GeneralFunctions.h"
 #include "FlexorsFunctions.h"
+#include "IMUFunctions.h"
 
 int TIME_TEST_FUNCTION_NUMBER = 9;
 unsigned long timeStart;
@@ -87,6 +88,22 @@ void selectFlexorsFunction(int functionCase, int flexors[]){
           resetFlexors(flexors);
           break;
           
+        default:
+
+          break;
+      }
+}
+
+void selectIMUFunction(int functionCase){
+  switch (functionCase) {
+
+        case 20:
+          start_IMU();
+          break;
+          
+        case 21:
+          set_IMU_Status();
+          break;
         default:
 
           break;

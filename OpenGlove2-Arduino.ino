@@ -1,5 +1,6 @@
 #include "FunctionsSwitch.h"
 #include "FlexorsFunctions.h"
+#include "IMUFunctions.h"
 
 int BAUD_RATE = 57600;
 int functionCase;
@@ -26,6 +27,8 @@ void loop() {
       selectFunction(functionCase);
      }else if(functionCase<20){
       selectFlexorsFunction(functionCase, flexors);
+     }else if(functionCase<30){
+       selectIMUFunction(functionCase);
      }
 	}
 
@@ -33,10 +36,14 @@ void loop() {
       if(flexors[i]>-1){
           flex_value=validValue(flexors, analogRead(flexors[i]), i);
           if(flex_value>-1){
-            Serial.println(String(i)+","+flex_value);
+            Serial.println("f,"+String(i)+","+flex_value);
           // Serial.println(String(flexors[i])+","+String(i)+","+flex_value);
           }
-       }    
+       }
+  }
+
+  if(get_IMU_Status() == true){
+    getAllData();
   }
   
   delay(cycleDelay);   
