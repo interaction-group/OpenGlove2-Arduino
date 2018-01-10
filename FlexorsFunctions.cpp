@@ -19,11 +19,11 @@ void addFlexor(int flexors[]){
   int mapping = Serial.parseInt();
   
   if(Serial.read() == TERMINAL_SIGN){
-    for(int i=0;i<TotalFlexors;i++){
+    /*for(int i=0;i<TotalFlexors;i++){
       if(flexors[i]==pin){
         return;  
       }
-    }
+    }*/
     pinMode(pin,INPUT);
     flexors[mapping]=pin;
     if(calibrate==true){

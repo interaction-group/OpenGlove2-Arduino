@@ -104,8 +104,12 @@ void selectIMUFunction(int functionCase){
         case 21:
           set_IMU_Status();
           break;
-        default:
 
+        case 22:
+          set_RawData();
+          break;
+          
+        default:
           break;
       }
 }

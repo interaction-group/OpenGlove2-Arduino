@@ -13,6 +13,7 @@
 
 LSM9DS1 imu;
 boolean IMU_Status = false;
+bool raw_values = false;
 static char TERMINAL_SIGN = 's';
 
 void setup_IMU()
@@ -36,6 +37,21 @@ void start_IMU(){
   }
 }
 
+void set_RawData()
+{
+  int value = Serial.parseInt();
+  if(Serial.read()==TERMINAL_SIGN)
+  {
+    if(value==1)
+    {
+      raw_values=true;
+    }else
+    {
+      raw_values=false;
+    }
+  }
+}
+
 boolean get_IMU_Status()
 {
   return IMU_Status;
@@ -55,11 +71,46 @@ void set_IMU_Status()
 }
 
 void getAllData(){
-  imu.readGyro();
-  imu.readAccel();
-  imu.readMag();
-  Serial.println("z,"+String(imu.ax)+","+String(imu.ay)+","+String(imu.az)+","+String(imu.gx)+","+String(imu.gy)+","+String(imu.gz)+","+String(imu.mx)+","+String(imu.my)+","+String(imu.mz));
+  if(imu.accelAvailable() && imu.gyroAvailable() && imu.magAvailable())
+  {
+    imu.readAccel();
+    imu.readGyro();
+    imu.readMag();
+    if(raw_values==true)
+    {
+      Serial.println("z,"+String(imu.ax)+","+String(imu.ay)+","+String(imu.az)+","+
+                          String(imu.gx)+","+String(imu.gy)+","+String(imu.gz)+","+
+                          String(imu.mx)+","+String(imu.my)+","+String(imu.mz));
+    }else
+    {
+      Serial.println("z,"+String(imu.calcAccel(imu.ax))+","+String(imu.calcAccel(imu.ay))+","+String(imu.calcAccel(imu.az))+","+
+                          String(imu.calcAccel(imu.gx))+","+String(imu.calcAccel(imu.gy))+","+String(imu.calcAccel(imu.gz))+","+
+                          String(imu.calcAccel(imu.mx))+","+String(imu.calcAccel(imu.my))+","+String(imu.calcAccel(imu.mz)));
+    }
+  }
+/*  if(imu.gyroAvailable())
+  {
+    imu.readGyro();
+  }
+  if(imu.magAvailable())
+  {
+    imu.readMag();
+  }
+
+  if(raw_values==true)
+  {
+    Serial.println("z,"+String(imu.ax)+","+String(imu.ay)+","+String(imu.az)+","+
+                        String(imu.gx)+","+String(imu.gy)+","+String(imu.gz)+","+
+                        String(imu.mx)+","+String(imu.my)+","+String(imu.mz));
+  }else
+  {
+    Serial.println("z,"+String(imu.calcAccel(imu.ax))+","+String(imu.calcAccel(imu.ay))+","+String(imu.calcAccel(imu.az))+","+
+                        String(imu.calcAccel(imu.gx))+","+String(imu.calcAccel(imu.gy))+","+String(imu.calcAccel(imu.gz))+","+
+                        String(imu.calcAccel(imu.mx))+","+String(imu.calcAccel(imu.my))+","+String(imu.calcAccel(imu.mz)));
+  }
+  */
 }
+
 void getGyro_raw(){
   imu.readGyro();
   Serial.println("g,"+String(imu.gx)+","+String(imu.gy)+","+String(imu.gz));
