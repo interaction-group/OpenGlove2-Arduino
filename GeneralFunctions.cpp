@@ -126,11 +126,20 @@ void analogWrite()
 			analogWrite(pins[i],values[i]);
 		}
 	}
-
 }
 
-
-
-
-
+void setLoopDelay(int* cycleDelay){
+  int delay = Serial.parseInt();
+  if(Serial.read() == TERMINAL_SIGN)
+  {
+    if(delay<0){
+      delay=0;
+    }
+    if(delay>200){
+      delay=200;
+    }
+    *cycleDelay=delay;
+  }
+  
+}
 

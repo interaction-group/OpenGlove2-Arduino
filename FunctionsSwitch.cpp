@@ -10,7 +10,6 @@ unsigned long timeStart;
 
 void selectFunction(int functionCase){
   switch (functionCase) {
-
         case 1:
 
           initializeMotor();

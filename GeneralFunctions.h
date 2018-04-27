@@ -6,3 +6,4 @@ void initializeDigitalInputs();
 void pinMode();
 void digitalWrite();
 void analogWrite();
+void setLoopDelay(int* cycleDelay);

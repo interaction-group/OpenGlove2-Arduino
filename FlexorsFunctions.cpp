@@ -19,6 +19,7 @@ void addFlexor(int flexors[]){
   int mapping = Serial.parseInt();
   
   if(Serial.read() == TERMINAL_SIGN){
+    //COMENTANDO ESTO PERMITE AÑADIR UN FLEXOR EN MÁS DE UNA POSICION
     /*for(int i=0;i<TotalFlexors;i++){
       if(flexors[i]==pin){
         return;  
@@ -27,9 +28,9 @@ void addFlexor(int flexors[]){
     pinMode(pin,INPUT);
     flexors[mapping]=pin;
     if(calibrate==true){
-      int min_avg =0;
-      int max_avg=0;
-      int count;
+      int min_avg = 0;
+      int max_avg = 0;
+      int count = 0;
       if(mapping<5){
         for(int i=0; i<5;i++){
           if(flexors[i]>-1){
@@ -112,21 +113,21 @@ int readSensor(int sensorValue,int r_min,int r_max)
 }
 
 int simpleValue(int value){
-  if(value<90 || value>280){
+  if(value<50 || value>350){
     return -1;
   }
   return value;
 }
 
 int validValue( int flexors[], int value, int indice){
-  if(value<90 || value>280){
+  if(value<50 || value>350){
     return -1;
   }
   else{
     if(calibrate==true){
       value = readSensor(value,flexors_min[indice],flexors_max[indice]);
     }else{
-      value = readSensor(value,130,270);
+      value = readSensor(value,80,210);
     }
     if(threshold_On == true){
       if(flexors_lastValue[indice]== -1){
@@ -184,18 +185,15 @@ void calibrateFlexors(int flexors[])
                   if(flexors_min[i]> value){
                     flexors_min[i]= value;
                   }
-               }
-               
+               }      
             }
         }
-  
         if(Serial.available() > 0){
           exit_f = Serial.read();
         }
         delay(100);
       }
       calibrate=true;
-      
   }
   
 }

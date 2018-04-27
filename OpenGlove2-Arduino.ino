@@ -1,4 +1,5 @@
 #include "FunctionsSwitch.h"
+#include "GeneralFunctions.h"
 #include "FlexorsFunctions.h"
 #include "IMUFunctions.h"
 
@@ -9,6 +10,8 @@ static const int TotalFlexors = 10;
 int flexors[TotalFlexors];
 int flex_value;
 int cycleDelay;
+
+
 void setup() {
  
  	Serial.begin(57600);
@@ -22,7 +25,12 @@ void setup() {
 void loop() {
 
 	if (Serial.available() > 0) {
+      
+    
 	    functionCase = Serial.parseInt();
+     if(functionCase==0){
+      setLoopDelay(&cycleDelay);
+     }
      if(functionCase<10){
       selectFunction(functionCase);
      }else if(functionCase<20){
