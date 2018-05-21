@@ -129,16 +129,16 @@ void analogWrite()
 }
 
 void setLoopDelay(int* cycleDelay){
-  int delay = Serial.parseInt();
+  int Delay = Serial.parseInt();
   if(Serial.read() == TERMINAL_SIGN)
   {
-    if(delay<0){
-      delay=0;
+    if(Delay<=0){
+      Delay=0;
     }
-    if(delay>200){
-      delay=200;
+    if(Delay>=200){
+      Delay=200;
     }
-    *cycleDelay=delay;
+    *cycleDelay=Delay;
   }
   
 }

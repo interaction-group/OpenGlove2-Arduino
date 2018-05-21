@@ -107,7 +107,11 @@ void selectIMUFunction(int functionCase){
         case 22:
           set_RawData();
           break;
-          
+
+        case 23:
+          set_ChoosingData();
+          break;
+         
         default:
           break;
       }

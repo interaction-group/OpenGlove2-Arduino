@@ -11,7 +11,6 @@ int flexors[TotalFlexors];
 int flex_value;
 int cycleDelay;
 
-
 void setup() {
  
  	Serial.begin(57600);
@@ -51,7 +50,7 @@ void loop() {
   }
 
   if(get_IMU_Status() == true){
-    getAllData();
+     getChoosenData();
   }
   
   delay(cycleDelay);   
