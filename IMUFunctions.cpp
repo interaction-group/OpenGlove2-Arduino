@@ -27,13 +27,13 @@ void setupGyro()
   imu.settings.gyro.enabled = true;  // Enable the gyro
   // [scale] sets the full-scale range of the gyroscope.
   // scale can be set to either 245, 500, or 2000
-  imu.settings.gyro.scale = 245; // Set scale to +/-245dps
+  imu.settings.gyro.scale = 2000; // Set scale to +/-245dps
   // [sampleRate] sets the output data rate (ODR) of the gyro
   // sampleRate can be set between 1-6
   // 1 = 14.9    4 = 238
   // 2 = 59.5    5 = 476
   // 3 = 119     6 = 952
-  imu.settings.gyro.sampleRate = 3; // 59.5Hz ODR
+  imu.settings.gyro.sampleRate = 0; // 59.5Hz ODR
   // [bandwidth] can set the cutoff frequency of the gyro.
   // Allowed values: 0-3. Actual value of cutoff frequency
   // depends on the sample rate. (Datasheet section 7.12)

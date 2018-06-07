@@ -136,7 +136,7 @@ int validValue( int flexors[], int value, int indice){
         flexors_lastValue[indice]=value;
         return value;
       }
-      if((value <= flexors_lastValue[indice]-threshold ) || (value >= flexors_lastValue[indice]+threshold ) || value == 0 || value == 100 ){
+      if((value <= flexors_lastValue[indice]-threshold ) || (value >= flexors_lastValue[indice]+threshold ) || (value == 0 && flexors_lastValue[indice]!=0) || value == 100 && flexors_lastValue[indice]!=100){
         flexors_lastValue[indice]=value;
         return value;
       }else{
