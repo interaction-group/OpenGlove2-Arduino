@@ -3,13 +3,17 @@
 #include "FlexorsFunctions.h"
 #include "IMUFunctions.h"
 
-int BAUD_RATE = 57600;
+int BAUD_RATE = 57600;//115200 //76800//57600;
 int functionCase;
 
 static const int TotalFlexors = 10;
 int flexors[TotalFlexors];
 int flex_value;
 int cycleDelay;
+
+void getOpenGloveArduinoVersionSoftware(){
+  Serial.println("OpenGloveArduino (2018) - 1.1.0"); // for semantic versioning  see this https://semver.org/
+}
 
 void setup() {
  
@@ -24,17 +28,19 @@ void setup() {
 void loop() {
 
 	if (Serial.available() > 0) {
-      
     
 	    functionCase = Serial.parseInt();
-     if(functionCase==0){
+     if(functionCase == 0){
       setLoopDelay(&cycleDelay);
      }
-     if(functionCase<10){
+     if(functionCase == 43){
+      getOpenGloveArduinoVersionSoftware();
+     }
+     if(functionCase < 10){
       selectFunction(functionCase);
-     }else if(functionCase<20){
+     }else if(functionCase < 20){
       selectFlexorsFunction(functionCase, flexors);
-     }else if(functionCase<30){
+     }else if(functionCase < 30){
        selectIMUFunction(functionCase);
      }
 	}
